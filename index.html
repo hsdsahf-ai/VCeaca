@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JandroCore Dashboard - Discord Bot Configuration</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+        
+        :root {
+            --bg-dark: #0a0e27;
+            --bg-card: #151b3d;
+            --bg-card-hover: #1a2047;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #7b2cbf;
+            --accent-tertiary: #ff006e;
+            --text-primary: #ffffff;
+            --text-secondary: #a8b2d1;
+            --text-muted: #6b7a99;
+            --border: #2d3561;
+            --success: #06ffa5;
+            --warning: #ffbe0b;
+            --error: #ff006e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Chakra Petch', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(123, 44, 191, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 0, 110, 0.1) 0%, transparent 50%);
+            animation: bgShift 20s ease infinite;
+        }
+        
+        @keyframes bgShift {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(2deg); }
+        }
+        
+        /* Navigation */
+        nav {
+            background: rgba(21, 27, 61, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        
+        .login-btn {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Chakra Petch', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 217, 255, 0.4);
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Landing Page */
+        .landing {
+            min-height: calc(100vh - 100px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+            width: 100%;
+        }
+        
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease backwards;
+        }
+        
+        .feature-card:nth-child(1) { animation-delay: 0.3s; }
+        .feature-card:nth-child(2) { animation-delay: 0.4s; }
+        .feature-card:nth-child(3) { animation-delay: 0.5s; }
+        .feature-card:nth-child(4) { animation-delay: 0.6s; }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+        }
+        
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            padding: 2rem 0;
+        }
+        
+        .dashboard.active {
+            display: block;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .server-selector {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .server-selector label {
+            display: block;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .server-select {
+            width: 100%;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .server-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+        }
+        
+        .config-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .config-section:hover {
+            border-color: var(--accent-primary);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .config-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .config-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .config-input, .config-select {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .config-input:focus, .config-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-switch.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(30px);
+        }
+        
+        .save-btn {
+            background: linear-gradient(135deg, var(--success), var(--accent-primary));
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Chakra Petch', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            width: 100%;
+        }
+        
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(6, 255, 165, 0.4);
+        }
+        
+        .info-box {
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid var(--accent-primary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .permission-calculator {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .invite-link-box {
+            background: var(--bg-dark);
+            border: 1px solid var(--accent-primary);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .invite-link-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--accent-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .copy-btn {
+            background: var(--accent-primary);
+            color: var(--bg-dark);
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Chakra Petch', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-primary);
+        }
+        
+        .logout-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: 'Chakra Petch', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        .guide-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .guide-step {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .guide-step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        code {
+            background: var(--bg-dark);
+            color: var(--accent-primary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .error-message {
+            background: rgba(255, 0, 110, 0.1);
+            border: 1px solid var(--error);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 2rem auto;
+            max-width: 600px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">JC</div>
+                <span>JandroCore</span>
+            </a>
+            <div id="navButtons">
+                <a href="#" class="login-btn" id="loginBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                    Login with Discord
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Landing Page -->
+        <div id="landingPage" class="landing">
+            <h1 class="hero-title">JandroCore</h1>
+            <p class="hero-subtitle">The ultimate all-in-one Discord bot for community management</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">Advanced Moderation</h3>
+                    <p class="feature-desc">AI-powered automod, custom punishments, appeals system, and comprehensive logging</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="feature-title">Economy System</h3>
+                    <p class="feature-desc">Work, daily rewards, rob, investments, custom roles, and VIP perks</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">AI Integration</h3>
+                    <p class="feature-desc">Smart chat responses, code generation, language learning, and personality modes</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <h3 class="feature-title">Games & Fun</h3>
+                    <p class="feature-desc">Mini-games, social features, fame system, kingdom mechanics, and entertainment commands</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Leveling & Stats</h3>
+                    <p class="feature-desc">XP system, leaderboards, activity tracking, and role rewards</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎫</div>
+                    <h3 class="feature-title">Tickets & Applications</h3>
+                    <p class="feature-desc">Support tickets, staff applications, appeal system, and custom workflows</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3 class="feature-title">Events & Calendar</h3>
+                    <p class="feature-desc">Birthdays, countdowns, giveaways, reminders, and server anniversaries</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3 class="feature-title">Full Customization</h3>
+                    <p class="feature-desc">Custom prefix, reaction roles, autoroles, and per-server configuration</p>
+                </div>
+            </div>
+
+            <div class="guide-section" style="max-width: 800px; margin-top: 4rem;">
+                <h2 class="section-title">🚀 Quick Setup Guide</h2>
+                <div class="guide-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Invite the Bot</h3>
+                        <p>Click "Login with Discord" above to generate your custom invite link with all required permissions</p>
+                    </div>
+                </div>
+                <div class="guide-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Configure Your Server</h3>
+                        <p>Use the dashboard to set up channels, roles, and features. Or use these commands in Discord:</p>
+                        <p><code>!setupverify</code> - Setup verification system</p>
+                        <p><code>!setuptickets</code> - Setup support tickets</p>
+                        <p><code>!setupapply</code> - Setup staff applications</p>
+                        <p><code>!setupappeal</code> - Setup ban appeals</p>
+                        <p><code>!setuproles</code> - Setup reaction roles</p>
+                    </div>
+                </div>
+                <div class="guide-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Customize Settings</h3>
+                        <p>Set your prefix, configure automod, assign roles, and enable features through the dashboard</p>
+                    </div>
+                </div>
+                <div class="guide-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Start Using!</h3>
+                        <p>Type <code>!help</code> to see all available commands and start engaging your community</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingPage" class="loading">
+            <div class="spinner"></div>
+            <h2 style="color: var(--accent-primary); margin-top: 1rem;">Loading your servers...</h2>
+            <p style="color: var(--text-secondary);">Please wait while we fetch your Discord data</p>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboardPage" class="dashboard">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Server Configuration</h1>
+                <p style="color: var(--text-secondary);">Configure JandroCore for your server</p>
+            </div>
+
+            <!-- Bot Invite Link Generator -->
+            <div class="permission-calculator">
+                <h2 class="section-title">🔗 Bot Invite Link</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Use this link to invite JandroCore to your server with all required permissions</p>
+                <div class="invite-link-box">
+                    <input type="text" id="inviteLink" readonly value="">
+                    <button class="copy-btn" onclick="copyInviteLink()">Copy</button>
+                </div>
+                <div class="info-box">
+                    <strong>📋 Required Permissions:</strong> Manage Roles, Manage Channels, Kick Members, Ban Members, Moderate Members (Timeout), Read Messages, Send Messages, Manage Messages, Embed Links, Attach Files, Add Reactions, Read Message History
+                </div>
+            </div>
+
+            <!-- Server Selector -->
+            <div class="server-selector">
+                <label>Select Server</label>
+                <select class="server-select" id="serverSelect" onchange="loadServerConfig()">
+                    <option>Loading your servers...</option>
+                </select>
+            </div>
+
+            <!-- Basic Settings -->
+            <div class="config-section">
+                <h2 class="section-title">⚙️ Basic Settings</h2>
+                <div class="config-grid">
+                    <div class="config-item">
+                        <label class="config-label">Command Prefix</label>
+                        <input type="text" class="config-input" id="prefix" placeholder="!" maxlength="5">
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Enable Automod</label>
+                        <div class="toggle-switch active" id="automodToggle" onclick="toggleSwitch(this)">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">AI Mood</label>
+                        <select class="config-select" id="aiMood">
+                            <option value="default">Default</option>
+                            <option value="friendly">Friendly</option>
+                            <option value="professional">Professional</option>
+                            <option value="sarcastic">Sarcastic</option>
+                            <option value="helpful">Helpful</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channel Configuration -->
+            <div class="config-section">
+                <h2 class="section-title">📢 Channel Configuration</h2>
+                <div class="config-grid">
+                    <div class="config-item">
+                        <label class="config-label">Welcome Channel</label>
+                        <select class="config-select" id="welcomeChannel">
+                            <option value="">Select a channel...</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Goodbye Channel</label>
+                        <select class="config-select" id="goodbyeChannel">
+                            <option value="">Select a channel...</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Log Channel</label>
+                        <select class="config-select" id="logChannel">
+                            <option value="">Select a channel...</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Level Up Channel</label>
+                        <select class="config-select" id="levelChannel">
+                            <option value="">Select a channel...</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Application Channel</label>
+                        <select class="config-select" id="applicationChannel">
+                            <option value="">Select a channel...</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Transcript Channel</label>
+                        <select class="config-select" id="transcriptChannel">
+                            <option value="">Select a channel...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Role Configuration -->
+            <div class="config-section">
+                <h2 class="section-title">👥 Role Configuration</h2>
+                <div class="config-grid">
+                    <div class="config-item">
+                        <label class="config-label">Owner Role</label>
+                        <select class="config-select" id="ownerRole">
+                            <option value="">Select a role...</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Manager Role</label>
+                        <select class="config-select" id="managerRole">
+                            <option value="">Select a role...</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Moderator Role</label>
+                        <select class="config-select" id="modRole">
+                            <option value="">Select a role...</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">VIP Role</label>
+                        <select class="config-select" id="vipRole">
+                            <option value="">Select a role...</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Banned Role</label>
+                        <select class="config-select" id="bannedRole">
+                            <option value="">Select a role...</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Verified Role</label>
+                        <select class="config-select" id="verifiedRole">
+                            <option value="">Select a role...</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Unverified Role</label>
+                        <select class="config-select" id="unverifiedRole">
+                            <option value="">Select a role...</option>
+                        </select>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Auto Role (on join)</label>
+                        <select class="config-select" id="autoRole">
+                            <option value="">None</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Toggles -->
+            <div class="config-section">
+                <h2 class="section-title">🎯 Feature Configuration</h2>
+                <div class="config-grid">
+                    <div class="config-item">
+                        <label class="config-label">Enable Economy System</label>
+                        <div class="toggle-switch active" id="economyToggle" onclick="toggleSwitch(this)">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Enable Leveling System</label>
+                        <div class="toggle-switch active" id="levelingToggle" onclick="toggleSwitch(this)">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Enable AI Chat</label>
+                        <div class="toggle-switch active" id="aiChatToggle" onclick="toggleSwitch(this)">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Enable Fame System</label>
+                        <div class="toggle-switch active" id="fameToggle" onclick="toggleSwitch(this)">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Enable Kingdom System</label>
+                        <div class="toggle-switch active" id="kingdomToggle" onclick="toggleSwitch(this)">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="config-item">
+                        <label class="config-label">Enable Social Features</label>
+                        <div class="toggle-switch active" id="socialToggle" onclick="toggleSwitch(this)">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="save-btn" onclick="saveConfig()">💾 Save Configuration</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
