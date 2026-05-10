@@ -1,7 +1,7 @@
 // Configuration - REPLACE THESE WITH YOUR VALUES
 const CONFIG = {
     CLIENT_ID: '1492875217440215061',
-    REDIRECT_URI: 'https://voidpulsedashboard.netlify.app/callback',
+    REDIRECT_URI: 'https://voidpulsedashboard.com/callback',
     PERMISSIONS: '1099780504646', // All required permissions
     API_ENDPOINT: '/.netlify/functions' // Netlify Functions endpoint
 };
