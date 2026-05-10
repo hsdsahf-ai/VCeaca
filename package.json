@@ -1,7 +1,7 @@
 {
-  "name": "jandrocore-dashboard",
+  "name": "voidpulse-dashboard",
   "version": "1.0.0",
-  "description": "Dashboard for JandroCore Discord Bot",
+  "description": "Dashboard for VoidPulse Discord Bot",
   "dependencies": {
     "node-fetch": "^2.6.7",
     "discord.js": "^14.14.1"
